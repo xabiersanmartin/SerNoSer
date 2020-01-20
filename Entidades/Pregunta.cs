@@ -8,14 +8,14 @@ namespace Entidades
 {
     public class Pregunta : IEquatable<Pregunta>
     {
-        public int idPregunt { get; set; }
+        public int idPregunta { get; set; }
         public int Nivel { get; set; }
         public string descripcion { get; set; }
 
 
         public Pregunta(int idPregunta, int nivel, string descripcion)
         {
-            this.idPregunt = idPregunta;
+            this.idPregunta = idPregunta;
             Nivel = nivel;
             this.descripcion = descripcion;
         }
@@ -27,7 +27,7 @@ namespace Entidades
 
         public Pregunta(int idPregunta, string descripcion)
         {
-            this.idPregunt = idPregunta;
+            this.idPregunta = idPregunta;
             this.descripcion = descripcion ?? throw new ArgumentNullException(nameof(descripcion));
         }
 
@@ -39,12 +39,12 @@ namespace Entidades
         public bool Equals(Pregunta other)
         {
             return other != null &&
-                   idPregunt == other.idPregunt;
+                   idPregunta == other.idPregunta;
         }
 
         public override int GetHashCode()
         {
-            return 1071672450 + idPregunt.GetHashCode();
+            return 1071672450 + idPregunta.GetHashCode();
         }
     }
 }
