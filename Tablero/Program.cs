@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CapaDatos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace Tablero
 {
     static class Program
     {
+       public static DatosSet Gestor = new DatosSet();
         /// <summary>
         /// Punto de entrada principal para la aplicación.
         /// </summary>

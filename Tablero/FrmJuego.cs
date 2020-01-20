@@ -49,7 +49,7 @@ namespace Tablero
 
         private void btnComenzar_Click(object sender, EventArgs e)
         {
-
+            Program.Gestor.DevolverPreguntasPorNivel(lblNivel.Text)
         }
 
         private void tmrTiempoTotal_Tick(object sender, EventArgs e)
