@@ -14,6 +14,8 @@ namespace Tablero
 {
     public partial class FrmJuego : Form
     {
+        public List<Pregunta> preguntasYaUsadas = new List<Pregunta>();
+
        public string msg;
         public FrmJuego()
         {
@@ -49,8 +51,10 @@ namespace Tablero
 
         private void btnComenzar_Click(object sender, EventArgs e)
         {
-            List<Pregunta> preguntasPorNivel = new List<Pregunta>();
-           preguntasPorNivel = Program.Gestor.DevolverPreguntasPorNivel(int.Parse(lblNivel.Text), out msg);
+            Pregunta preguntaPorNivel;
+
+           preguntaPorNivel = Program.Gestor.DevolverPreguntaPorNivel(int.Parse(lblNivel.Text), preguntasYaUsadas, out msg);
+
             if (!(msg == ""))
             {
                 MessageBox.Show(msg);
