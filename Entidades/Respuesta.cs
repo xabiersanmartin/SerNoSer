@@ -13,6 +13,8 @@ namespace Entidades
         public int idRespuesta { get; set; }
         public bool valida { get; set; }
         public string posibleRespuesta { get; set; }
+        public string explicacion { get; set; }
+
 
 
         

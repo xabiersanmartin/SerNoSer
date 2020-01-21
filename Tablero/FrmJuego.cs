@@ -29,7 +29,7 @@ namespace Tablero
         }
         private void btnCambiarPregunta_Click(object sender, EventArgs e)
         {
-
+            
         }
 
 

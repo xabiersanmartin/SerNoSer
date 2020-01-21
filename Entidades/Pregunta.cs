@@ -11,6 +11,7 @@ namespace Entidades
         public int idPregunta { get; set; }
         public int Nivel { get; set; }
         public string descripcion { get; set; }
+        public List<Respuesta> respuestas { get; set; }
 
 
         public Pregunta(int idPregunta, int nivel, string descripcion)
