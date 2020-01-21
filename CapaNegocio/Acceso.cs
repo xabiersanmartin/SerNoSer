@@ -9,11 +9,10 @@ using static CapaDatos.DataSetSerNoSer;
 
 namespace CapaNegocio
 {
-    class Acceso
+    public class Acceso
     {
         DatosSet nuevoAcceso = new DatosSet();
 
-        List<Pregunta> preguntin;
 
         public List<Pregunta> DevolverPreguntasPorNivel(int nivel, out string msg)
         {

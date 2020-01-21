@@ -32,6 +32,10 @@ namespace CapaDatos
             var nivelMaximo = (from pregunta in ds.Preguntas
                                select pregunta.Nivel).Max();
 
+           // PreguntasRow drPre;
+          //  drPre.GetRespuestasRows
+
+
             if (preguntas == null)
             {
                 msg = "La lista de preguntas esta vacia";

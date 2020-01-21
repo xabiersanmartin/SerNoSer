@@ -1,4 +1,4 @@
-﻿using CapaDatos;
+﻿using CapaNegocio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace Tablero
 {
     static class Program
     {
-       public static DatosSet Gestor = new DatosSet();
+       public static Acceso Gestor = new Acceso();
         /// <summary>
         /// Punto de entrada principal para la aplicación.
         /// </summary>

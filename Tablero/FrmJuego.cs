@@ -51,6 +51,11 @@ namespace Tablero
         {
             List<Pregunta> preguntasPorNivel = new List<Pregunta>();
            preguntasPorNivel = Program.Gestor.DevolverPreguntasPorNivel(int.Parse(lblNivel.Text), out msg);
+            if (!(msg == ""))
+            {
+                MessageBox.Show(msg);
+            }
+            
         }
 
         private void tmrTiempoTotal_Tick(object sender, EventArgs e)
