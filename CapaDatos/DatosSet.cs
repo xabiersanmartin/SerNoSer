@@ -27,8 +27,9 @@ namespace CapaDatos
             dsPregunta = ds.Preguntas.Where(drPreg => drPreg.Nivel == Nivel).ToList();
 
             List<Pregunta> preguntas = (from dr in dsPregunta
-                                       select new Pregunta(dr.NumPregunta, dr.Enunciado)).ToList();
-            var nivelMaximo = (from pregunta in preguntas
+                                       select new Pregunta(dr.NumPregunta, dr.Nivel, dr.Enunciado)).ToList();
+
+            var nivelMaximo = (from pregunta in ds.Preguntas
                                select pregunta.Nivel).Max();
 
             if (preguntas == null)

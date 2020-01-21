@@ -220,6 +220,7 @@
             this.lblNivel.Name = "lblNivel";
             this.lblNivel.Size = new System.Drawing.Size(59, 55);
             this.lblNivel.TabIndex = 34;
+            this.lblNivel.Text = "1";
             this.lblNivel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
