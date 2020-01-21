@@ -14,7 +14,7 @@ namespace Tablero
 {
     public partial class FrmJuego : Form
     {
-
+       public string msg;
         public FrmJuego()
         {
             InitializeComponent();
@@ -49,7 +49,8 @@ namespace Tablero
 
         private void btnComenzar_Click(object sender, EventArgs e)
         {
-            Program.Gestor.DevolverPreguntasPorNivel(lblNivel.Text)
+            List<Pregunta> preguntasPorNivel = new List<Pregunta>();
+           preguntasPorNivel = Program.Gestor.DevolverPreguntasPorNivel(int.Parse(lblNivel.Text), out msg);
         }
 
         private void tmrTiempoTotal_Tick(object sender, EventArgs e)
