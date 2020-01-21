@@ -38,6 +38,17 @@ namespace Entidades
             this.posibleRespuesta = posibleRespuesta ?? throw new ArgumentNullException(nameof(posibleRespuesta));
         }
 
+        public Respuesta(int idPregunta, int idRespuesta, bool valida, string posibleRespuesta, string explicacion
+            ) : this(idPregunta, idRespuesta, valida, posibleRespuesta)
+        {
+            this.explicacion = explicacion ?? throw new ArgumentNullException(nameof(explicacion));
+        }
+
+        public Respuesta(int idPregunta, int idRespuesta, string explicacion) : this(idPregunta, idRespuesta)
+        {
+            this.explicacion = explicacion ?? throw new ArgumentNullException(nameof(explicacion));
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as Respuesta);

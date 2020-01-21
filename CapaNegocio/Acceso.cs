@@ -14,9 +14,24 @@ namespace CapaNegocio
         DatosSet nuevoAcceso = new DatosSet();
 
 
-        public List<Pregunta> DevolverPreguntasPorNivel(int nivel, out string msg)
+        public Pregunta DevolverPreguntaPorNivel(int nivel, List<Pregunta> preguntasYaUsadas, out string msg)
         {
-            return nuevoAcceso.DevolverPreguntasPorNivel(nivel, out msg);
+            List<Pregunta> todasLasPreguntas = nuevoAcceso.DevolverPreguntasPorNivel(nivel, out msg);
+            List<int> idsDePregunta = (from p in todasLasPreguntas
+                                       select p.idPregunta).ToList();
+            Random rnd = new Random();
+            int numeroAlAzar;
+            Pregunta preguntaAlAzar = null;
+            do
+            {
+                numeroAlAzar = rnd.Next(idsDePregunta.Min(), (idsDePregunta.Max() + 1));
+                preguntaAlAzar = (from pre in preguntasYaUsadas
+                                  where pre.idPregunta == numeroAlAzar
+                                  select pre).SingleOrDefault();
+
+            } while (preguntaAlAzar != null);
+           
+            return preguntaAlAzar;
         }
     }
 }
