@@ -15,7 +15,7 @@ namespace Tablero
     public partial class FrmJuego : Form
     {
         public List<Pregunta> preguntasYaUsadas = new List<Pregunta>();
-
+        public Respuesta btn1Info = new Respuesta();
        public string msg;
         public FrmJuego()
         {
@@ -23,9 +23,24 @@ namespace Tablero
         }
         private void FrmJuego_Load(object sender, EventArgs e)
         {
+            List<int> ListaNiveles = new List<int>();
             cboNivel.Items.Clear();
-            cboNivel.Items.AddRange(Program.Gestor.DevolverPreguntas().ToArray());
-            cboNivel.DisplayMember="Nivel";
+            
+            foreach (int nivel in Program.Gestor.DevolverNivel())
+            {
+                
+                if (ListaNiveles.Contains(nivel))
+                {
+                    ListaNiveles.Add(nivel);
+                }
+                else
+                {
+                    ListaNiveles.Add(nivel);
+                    cboNivel.Items.Add(nivel);
+                }
+                 
+            }
+            
         }
         private List<Button> ObtenerBotonesRespuestas()
         {
@@ -65,7 +80,11 @@ namespace Tablero
             {
                 lblEnunciado.Text = preguntaPorNivel.descripcion;
             }
-            
+            foreach (Respuesta resp in preguntaPorNivel.respuestas)
+            {
+                btn1Info = resp;
+            }
+            btn1.Text = btn1Info.posibleRespuesta;
         }
 
         private void tmrTiempoTotal_Tick(object sender, EventArgs e)
@@ -73,6 +92,22 @@ namespace Tablero
 
         }
 
+        private void cboNivel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lblNivel.Text = cboNivel.Text;
+        }
 
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            if (btn1Info.valida == true)
+            {
+                btn1.BackColor = Color.Green;
+            }
+            else
+            {
+                btn1.BackColor = Color.Red;
+                MessageBox.Show(msg);
+            }
+        }
     }
 }

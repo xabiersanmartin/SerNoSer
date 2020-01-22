@@ -34,9 +34,9 @@ namespace CapaNegocio
            
             return preguntaAlAzar;
         }
-        public IReadOnlyCollection<Pregunta> DevolverPreguntas()
+        public IReadOnlyCollection<int> DevolverNivel()
         {
-            return nuevoAcceso.DevolverTodasPreguntas();
+            return nuevoAcceso.DevolverTodosNiveles();
         }
     }
 }

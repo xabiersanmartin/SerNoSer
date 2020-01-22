@@ -108,15 +108,13 @@ namespace CapaDatos
             return preguntas;
         }
 
-         public  IReadOnlyCollection<Pregunta> DevolverTodasPreguntas()
+         public  IReadOnlyCollection<int> DevolverTodosNiveles()
         {
-            List<PreguntasRow> dsPreguntas;
-            dsPreguntas = (from dr in ds.Preguntas
-                           select dr).ToList();
                            
-            List<Pregunta> preguntasTodas = (from dr in dsPreguntas
-                                             select new Pregunta(dr.Nivel)).ToList();
-            return preguntasTodas;
+            List<int> nivelesTodos = (from dr in ds.Preguntas
+                                      orderby dr.Nivel ascending
+                                     select dr.Nivel).ToList();
+            return nivelesTodos;
         }
 
 
