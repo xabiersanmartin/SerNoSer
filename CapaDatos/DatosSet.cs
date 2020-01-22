@@ -28,15 +28,19 @@ namespace CapaDatos
 
         public List<Pregunta> DevolverPreguntasPorNivel(int Nivel, out string msg)
         {
-
+            // Una condicion para comprobar si el programa ha podido conectar con la base datos.
             if (ds == null)
             {
-                //mete mensaje de conexion
+                msg = "No se ha podido establecer conexión con la base de datos";
+                return null;
             }
             if (ds.Preguntas == null)
             {
+                msg = "No hay preguntas entre el nivel 1 y el maximo";
                 //no hay preguntas entre niveles 1 y el que sea
             }
+
+            // Comprobamos el nivel maximo de las preguntas en la base de datos, para guardarlo en una variable y despues usarlo en el control de errores.
             var nivelMaximo = (from pregunta in ds.Preguntas
                                select pregunta.Nivel).Max();
 
@@ -85,22 +89,30 @@ namespace CapaDatos
                 {
                     if (pregunta.respuestas.Where(resp => resp.valida == true).Count() != 8 || pregunta.respuestas.Where(resp => resp.valida == false).Count() != 4)
                     {
+                        msg = "El número de respuestas verdades no son 8 o no hay 4 falsas";
+                        return null;
                         //mensaje de número de respuestas distinto de 8 y 4
                     }
                 }
                 else
                 {
+                    msg = "No hay 12 respuestas para esa pregunta";
+                    return null;
                     //numero de respuestas buenas o no distinto de 12
                 }
             }
 
-            // PreguntasRow drPre;
-            //  drPre.GetRespuestasRows
 
 
             msg = "";
             return preguntas;
         }
+
+
+
+
+
+
 
 
         //public List<Respuesta> DevolverRespuestas(int numPregunta)
