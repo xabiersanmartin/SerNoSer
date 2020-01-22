@@ -26,6 +26,11 @@ namespace Entidades
 
         }
 
+        public Pregunta(int nivel)
+        {
+            Nivel = nivel;
+        }
+
         public Pregunta(int idPregunta, string descripcion)
         {
             this.idPregunta = idPregunta;

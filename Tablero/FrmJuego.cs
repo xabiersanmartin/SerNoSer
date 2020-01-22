@@ -23,7 +23,9 @@ namespace Tablero
         }
         private void FrmJuego_Load(object sender, EventArgs e)
         {
-
+            cboNivel.Items.Clear();
+            cboNivel.Items.AddRange(Program.Gestor.DevolverPreguntas().ToArray());
+            cboNivel.DisplayMember="Nivel";
         }
         private List<Button> ObtenerBotonesRespuestas()
         {
@@ -58,6 +60,10 @@ namespace Tablero
             if (!(msg == ""))
             {
                 MessageBox.Show(msg);
+            }
+            else
+            {
+                lblEnunciado.Text = preguntaPorNivel.descripcion;
             }
             
         }

@@ -19,19 +19,24 @@ namespace CapaNegocio
             List<Pregunta> todasLasPreguntas = nuevoAcceso.DevolverPreguntasPorNivel(nivel, out msg);
             List<int> idsDePregunta = (from p in todasLasPreguntas
                                        select p.idPregunta).ToList();
+            var noRepetidas = todasLasPreguntas.Distinct();
             Random rnd = new Random();
             int numeroAlAzar;
-            Pregunta preguntaAlAzar = null;
+            Pregunta preguntaAlAzar;
             do
             {
                 numeroAlAzar = rnd.Next(idsDePregunta.Min(), (idsDePregunta.Max() + 1));
-                preguntaAlAzar = (from pre in preguntasYaUsadas
+                preguntaAlAzar = (from pre in noRepetidas
                                   where pre.idPregunta == numeroAlAzar
                                   select pre).SingleOrDefault();
 
-            } while (preguntaAlAzar != null);
+            } while (preguntaAlAzar == null);
            
             return preguntaAlAzar;
+        }
+        public IReadOnlyCollection<Pregunta> DevolverPreguntas()
+        {
+            return nuevoAcceso.DevolverTodasPreguntas();
         }
     }
 }
