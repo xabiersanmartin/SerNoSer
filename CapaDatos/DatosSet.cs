@@ -34,11 +34,7 @@ namespace CapaDatos
                 msg = "No se ha podido establecer conexión con la base de datos";
                 return null;
             }
-            if (ds.Preguntas == null)
-            {
-                msg = "No hay preguntas entre el nivel 1 y el maximo";
-                //no hay preguntas entre niveles 1 y el que sea
-            }
+            
 
             // Comprobamos el nivel maximo de las preguntas en la base de datos, para guardarlo en una variable y despues usarlo en el control de errores.
             var nivelMaximo = (from pregunta in ds.Preguntas
@@ -49,7 +45,7 @@ namespace CapaDatos
                 msg = "El nivel seleccionado sobrepasa el nivel de las preguntas.";
                 return null;
             }
-
+            
             //Preguntas normales de datarow a lista
             List<PreguntasRow> dsPregunta;
             dsPregunta = ds.Preguntas.Where(drPreg => drPreg.Nivel == Nivel).ToList();

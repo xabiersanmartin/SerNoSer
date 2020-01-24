@@ -242,6 +242,7 @@
             this.lblTiempo.Size = new System.Drawing.Size(79, 68);
             this.lblTiempo.TabIndex = 33;
             this.lblTiempo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblTiempo.Click += new System.EventHandler(this.lblTiempo_Click);
             // 
             // lblNivel
             // 

@@ -17,6 +17,11 @@ namespace CapaNegocio
         public Pregunta DevolverPreguntaPorNivel(int nivel, List<Pregunta> preguntasYaUsadas, out string msg)
         {
             List<Pregunta> todasLasPreguntas = nuevoAcceso.DevolverPreguntasPorNivel(nivel, out msg);
+
+            if (msg == "El nivel seleccionado sobrepasa el nivel de las preguntas.")
+            {
+                return null;
+            }
             List<int> idsDePregunta = (from p in todasLasPreguntas
                                        select p.idPregunta).ToList();
             var noRepetidas = todasLasPreguntas.Distinct();

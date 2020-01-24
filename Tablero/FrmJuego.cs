@@ -14,6 +14,7 @@ namespace Tablero
 {
     public partial class FrmJuego : Form
     {
+        public int tiempoAtras = 12;
         public Pregunta preguntaPorNivel;
         public List<Pregunta> preguntasYaUsadas = new List<Pregunta>();
         public Respuesta btn1Info = new Respuesta();
@@ -29,6 +30,7 @@ namespace Tablero
         public Respuesta btn11Info = new Respuesta();
         public Respuesta btn12Info = new Respuesta();
         public string msg;
+        public string respuestaTiempo = "Te has quedado sin tiempo para esta pregunta, ¿deseas continuar con otra pregunta? No finalizará el programa";
         public string respuestaIncorrecta = "Has perdido, intentelo de nuevo despúes de leer la Wikipedia";
         public string respuestaCorrecta = "Has acertado las 8 respuestas validas¿deseas continuar con otra pregunta?";
         public string siguenteNivel = "Deseas pasar al siguente nivel?";
@@ -40,6 +42,20 @@ namespace Tablero
         }
         private void FrmJuego_Load(object sender, EventArgs e)
         {
+            btnComenzar.Enabled = true;
+            btn1.Enabled = false;
+            btn2.Enabled = false;
+            btn3.Enabled = false;
+            btn4.Enabled = false;
+            btn5.Enabled = false;
+            btn6.Enabled = false;
+            btn7.Enabled = false;
+            btn8.Enabled = false;
+            btn9.Enabled = false;
+            btn10.Enabled = false;
+            btn11.Enabled = false;
+            btn12.Enabled = false;
+
             List<int> ListaNiveles = new List<int>();
             cboNivel.Items.Clear();
             
@@ -57,7 +73,7 @@ namespace Tablero
                 }
                  
             }
-            
+            cboNivel.SelectedIndex=0;
         }
         private List<Button> ObtenerBotonesRespuestas()
         {
@@ -85,6 +101,15 @@ namespace Tablero
 
         private void btnComenzar_Click(object sender, EventArgs e)
         {
+            btnComenzar.Enabled = false;
+
+            tiempoAtras = 12;
+            tmrTiempoTotal.Interval = 1000;
+            tmrTiempoTotal.Enabled = true;
+            tmrTiempoTotal.Start();
+            lblTiempo.Text = tiempoAtras.ToString();
+
+            lblRespuestaValida.Text = "";
             contadorCorrectas = 0;
             contadorErroneas = 0;
             btn1.BackColor = Color.Empty;
@@ -99,8 +124,62 @@ namespace Tablero
             btn10.BackColor = Color.Empty;
             btn11.BackColor = Color.Empty;
             btn12.BackColor = Color.Empty;
+            
+            btn1.Enabled = true;
+            btn2.Enabled = true;
+            btn3.Enabled = true;
+            btn4.Enabled = true;
+            btn5.Enabled = true;
+            btn6.Enabled = true;
+            btn7.Enabled = true;
+            btn8.Enabled = true;
+            btn9.Enabled = true;
+            btn10.Enabled = true;
+            btn11.Enabled = true;
+            btn12.Enabled = true;
+
+            
 
             preguntaPorNivel = Program.Gestor.DevolverPreguntaPorNivel(int.Parse(lblNivel.Text), preguntasYaUsadas, out msg);
+
+            if (preguntaPorNivel == null)
+            {
+                MessageBox.Show(msg);
+                this.Close();
+                return;
+            }
+
+
+            if (int.Parse(lblNivel.Text) > preguntaPorNivel.Nivel)
+            {
+                MessageBox.Show(msg);
+                this.Close();
+                return;
+            }
+              
+
+            if (preguntaPorNivel.respuestas.Count != 12)
+            {
+                MessageBox.Show(msg);
+            }
+            int contadorVal=0;
+            int contadorErr=0;
+            foreach (Respuesta resp in preguntaPorNivel.respuestas)
+            {
+                if (resp.valida == true)
+                {
+                    contadorVal++;
+                }
+                else
+                {
+                    contadorErr++;
+                }
+            }
+            
+            if(contadorVal!=8 && contadorErr != 4)
+            {
+                MessageBox.Show(msg);
+            }
 
             if (!(msg == ""))
             {
@@ -182,7 +261,22 @@ namespace Tablero
 
         private void tmrTiempoTotal_Tick(object sender, EventArgs e)
         {
-
+            lblTiempo.Text = tiempoAtras.ToString();
+            tiempoAtras --;
+            if (tiempoAtras < 0)
+            {
+                tmrTiempoTotal.Stop();
+                DialogResult result = MessageBox.Show(respuestaTiempo, "Salir", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    btnComenzar.Enabled = true;
+                    btnComenzar.PerformClick();
+                }
+                else
+                {
+                    this.Close();
+                }
+            }
         }
 
         private void cboNivel_SelectedIndexChanged(object sender, EventArgs e)
@@ -192,6 +286,9 @@ namespace Tablero
 
         private void btn1_Click(object sender, EventArgs e)
         {
+            btn1.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn1Info.valida == true)
             {
                 btn1.BackColor = Color.Green;
@@ -201,6 +298,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -215,11 +313,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -244,6 +339,9 @@ namespace Tablero
 
         private void btn2_Click(object sender, EventArgs e)
         {
+            btn2.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn2Info.valida == true)
             {
                 btn2.BackColor = Color.Green;
@@ -253,6 +351,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -267,11 +366,9 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                           
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -304,7 +401,9 @@ namespace Tablero
 
         private void btn3_Click(object sender, EventArgs e)
         {
-
+            btn3.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn3Info.valida == true)
             {
                 btn3.BackColor = Color.Green;
@@ -314,6 +413,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
 
                     }
@@ -329,11 +429,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -360,7 +457,9 @@ namespace Tablero
 
         private void btn4_Click(object sender, EventArgs e)
         {
-
+            btn4.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn4Info.valida == true)
             {
                 btn4.BackColor = Color.Green;
@@ -370,6 +469,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -384,11 +484,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -415,7 +512,9 @@ namespace Tablero
 
         private void btn5_Click(object sender, EventArgs e)
         {
-
+            btn5.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn5Info.valida == true)
             {
                 btn5.BackColor = Color.Green;
@@ -425,6 +524,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -439,11 +539,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -470,7 +567,9 @@ namespace Tablero
 
         private void btn6_Click(object sender, EventArgs e)
         {
-
+            btn6.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn6Info.valida == true)
             {
                 btn6.BackColor = Color.Green;
@@ -480,6 +579,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -494,11 +594,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -525,7 +622,9 @@ namespace Tablero
 
         private void btn7_Click(object sender, EventArgs e)
         {
-
+            btn7.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn7Info.valida == true)
             {
                 btn7.BackColor = Color.Green;
@@ -535,6 +634,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -549,11 +649,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -580,7 +677,9 @@ namespace Tablero
 
         private void btn8_Click(object sender, EventArgs e)
         {
-
+            btn8.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn8Info.valida == true)
             {
                 btn8.BackColor = Color.Green;
@@ -590,6 +689,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -603,11 +703,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -634,7 +731,9 @@ namespace Tablero
 
         private void btn9_Click(object sender, EventArgs e)
         {
-
+            btn9.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn9Info.valida == true)
             {
                 btn9.BackColor = Color.Green;
@@ -644,6 +743,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -657,11 +757,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -688,7 +785,9 @@ namespace Tablero
 
         private void btn10_Click(object sender, EventArgs e)
         {
-
+            btn10.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn10Info.valida == true)
             {
                 btn10.BackColor = Color.Green;
@@ -698,6 +797,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -711,11 +811,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                            
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -742,7 +839,9 @@ namespace Tablero
 
         private void btn11_Click(object sender, EventArgs e)
         {
-
+            btn11.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn11Info.valida == true)
             {
                 btn11.BackColor = Color.Green;
@@ -752,6 +851,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -765,11 +865,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                           
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -796,7 +893,9 @@ namespace Tablero
 
         private void btn12_Click(object sender, EventArgs e)
         {
-
+            btn12.Enabled = false;
+            tiempoAtras = 12;
+            lblRespuestaValida.Text = "";
             if (btn12Info.valida == true)
             {
                 btn12.BackColor = Color.Green;
@@ -806,6 +905,7 @@ namespace Tablero
                     DialogResult result = MessageBox.Show(respuestaCorrecta, "Salir", MessageBoxButtons.YesNo);
                     if (result == DialogResult.Yes)
                     {
+                        btnComenzar.Enabled = true;
                         btnComenzar.PerformClick();
                     }
                     if (result == DialogResult.No)
@@ -819,11 +919,8 @@ namespace Tablero
                         if (result == DialogResult.Yes)
                         {
                             lblNivel.Text = (int.Parse(lblNivel.Text) + 1).ToString();
-                            if (int.Parse(lblNivel.Text) > cboNivel.Items.Count)
-                            {
-                                MessageBox.Show("Has superado el nivel maximo Zorionak");
-                                this.Close();
-                            }
+                           
+                            btnComenzar.Enabled = true;
                             btnComenzar.PerformClick();
                         }
                         if (result == DialogResult.No)
@@ -846,6 +943,11 @@ namespace Tablero
                 MessageBox.Show(respuestaIncorrecta);
                 this.Close();
             }
+        }
+
+        private void lblTiempo_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
