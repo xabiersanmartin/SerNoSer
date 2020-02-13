@@ -29,7 +29,7 @@ namespace CapaDatos
         public List<Pregunta> DevolverPreguntasPorNivel(int Nivel, out string msg)
         {
             // Una condicion para comprobar si el programa ha podido conectar con la base datos.
-            if (ds == null)
+            if (ds == null) // todo No tiene sentido
             {
                 msg = "No se ha podido establecer conexión con la base de datos";
                 return null;
@@ -52,7 +52,7 @@ namespace CapaDatos
             List<Pregunta> preguntas = (from dr in dsPregunta
                                         select new Pregunta(dr.NumPregunta, dr.Nivel, dr.Enunciado)).ToList();
 
-            if (preguntas == null)
+            if (preguntas == null) // TODO Nunca sería null, en todo caso lista sin elementos
             {
                 msg = "La lista de preguntas esta vacia";
                 return null;
@@ -61,7 +61,7 @@ namespace CapaDatos
             foreach (var pregunta in preguntas)
             {
                 //Respuestas normales de datarow a lista
-                List<RespuestasRow> dsRespuestasDePregunta = ds.Respuestas.Where(drResp => drResp.NumPregunta == pregunta.idPregunta).ToList();
+                List<RespuestasRow> dsRespuestasDePregunta = ds.Respuestas.Where(drResp => drResp.NumPregunta == pregunta.idPregunta).ToList(); // TODO ¡¡¡Busca en TODAS las respuestas!!!! Debería recorrer solo las de esa pregunta (que ya las tiene por DataSet)
                 List<Respuesta> respuestasDePregunta = (from dr in dsRespuestasDePregunta
                                                         select new Respuesta(dr.NumPregunta, dr.NumRespuesta, dr.Valida, dr.PosibleRespuesta)).ToList();
                 //Respuestas no validas de datarow a lista
@@ -72,6 +72,7 @@ namespace CapaDatos
                 //Metemos a las respuestas normales su explicacion cuando no es válida y tiene explicacion, si no mensaje por defecto
                 foreach (var respuesta in respuestasDePregunta)
                 {
+                    // Todo de nuevo la misma filosofía, buscar entre TODAS en lugar de ir a las únicas posibles
                     Respuesta respuestaConExplicacion = (from resp in respuestasNoValidasDePregunta
                                                          where resp.idRespuesta == respuesta.idRespuesta
                                                          select resp).SingleOrDefault();
@@ -104,7 +105,7 @@ namespace CapaDatos
             return preguntas;
         }
 
-         public  IReadOnlyCollection<int> DevolverTodosNiveles()
+         public  IReadOnlyCollection<int> DevolverTodosNiveles() // TODO Esto devuelve una lista ilógica (repetidos) y que no se necesitaba. Si se controlaba que había preguntas en todos los niveles del 1 al máximo (sería lo lógico) con conocer el máximo vale
         {
                            
             List<int> nivelesTodos = (from dr in ds.Preguntas

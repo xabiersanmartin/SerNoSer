@@ -14,23 +14,23 @@ namespace CapaNegocio
         DatosSet nuevoAcceso = new DatosSet();
 
 
-        public Pregunta DevolverPreguntaPorNivel(int nivel, List<Pregunta> preguntasYaUsadas, out string msg)
+        public Pregunta DevolverPreguntaPorNivel(int nivel, List<Pregunta> preguntasYaUsadas, out string msg) // TODO No tiene sentido. No controla que no se repitan ya que trabaja con variables locales y sin lógica
         {
             List<Pregunta> todasLasPreguntas = nuevoAcceso.DevolverPreguntasPorNivel(nivel, out msg);
-
+            // TODO Ver método y posibles respuestas
             if (msg == "El nivel seleccionado sobrepasa el nivel de las preguntas.")
             {
                 return null;
             }
             List<int> idsDePregunta = (from p in todasLasPreguntas
-                                       select p.idPregunta).ToList();
-            var noRepetidas = todasLasPreguntas.Distinct();
+                                       select p.idPregunta).ToList(); // TODO Cada vez va a buscar todas...
+            var noRepetidas = todasLasPreguntas.Distinct(); // TODO ¿Qué es esto aquí?
             Random rnd = new Random();
             int numeroAlAzar;
             Pregunta preguntaAlAzar;
-            do
+            do // TODO Esto lo único que hace, dando un número de vueltas absurdas, sacar una pregunta al azar de las que haya en el nivel, pero sin control de no repetida
             {
-                numeroAlAzar = rnd.Next(idsDePregunta.Min(), (idsDePregunta.Max() + 1));
+                numeroAlAzar = rnd.Next(idsDePregunta.Min(), (idsDePregunta.Max() + 1)); 
                 preguntaAlAzar = (from pre in noRepetidas
                                   where pre.idPregunta == numeroAlAzar
                                   select pre).SingleOrDefault();
