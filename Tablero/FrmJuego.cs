@@ -17,7 +17,7 @@ namespace Tablero
         public int tiempoAtras = 12;
         public Pregunta preguntaPorNivel;
         public List<Pregunta> preguntasYaUsadas = new List<Pregunta>();
-        public Respuesta btn1Info = new Respuesta();
+        public Respuesta btn1Info = new Respuesta(); // todo De nuevo....
         public Respuesta btn2Info = new Respuesta();
         public Respuesta btn3Info = new Respuesta();
         public Respuesta btn4Info = new Respuesta();
@@ -43,7 +43,7 @@ namespace Tablero
         private void FrmJuego_Load(object sender, EventArgs e)
         {
             btnComenzar.Enabled = true;
-            btn1.Enabled = false;
+            btn1.Enabled = false; // todo ¿Cómo podéis a estas alturas plantear así el tratamiento de los botones? ¡¡¡¡TODO el código repetido continaumente!!!!
             btn2.Enabled = false;
             btn3.Enabled = false;
             btn4.Enabled = false;
@@ -112,7 +112,7 @@ namespace Tablero
             lblRespuestaValida.Text = "";
             contadorCorrectas = 0;
             contadorErroneas = 0;
-            btn1.BackColor = Color.Empty;
+            btn1.BackColor = Color.Empty; 
             btn2.BackColor = Color.Empty;
             btn3.BackColor = Color.Empty;
             btn4.BackColor = Color.Empty;
